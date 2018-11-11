@@ -429,19 +429,30 @@ final class Tools
      * Return ARRAY value from COOKIE
      *
      * @param string $key
+     * @param string $explode_delimiter
      * @param bool $default
      *
      * @return bool|array
      */
-    public static function getArrayFromCookie(string $key, $default = false)
+    public static function getArrayFromCookie(string $key, string $explode_delimiter = '', $default = false)
     {
-        // TODO add cookie data converter to array
+        if (isset($_COOKIE[$key])) {
+            if (($json_data = @json_decode($_COOKIE[$key], true)) != null) {
+                $cookie = $json_data;
+            } elseif ($explode_delimiter != '') {
+                $cookie = explode($explode_delimiter, $_COOKIE[$key]);
+            } else {
+                $cookie = (array) $_COOKIE[$key];
+            }
+
+            return $cookie;
+        }
 
         return $default;
     }
 
     /**
-     * Return RAW value FROM COOKIE
+     * Return RAW value from COOKIE
      *
      * @param string $key
      * @param bool $default
