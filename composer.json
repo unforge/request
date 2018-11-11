@@ -11,7 +11,8 @@
     }
   ],
   "require": {
-    "php": ">=7.0.1"
+    "php": ">=7.1",
+    "unforge/array-toolkit": "dev-master"
   },
   "autoload": {
     "psr-4": {

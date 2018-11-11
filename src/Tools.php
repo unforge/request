@@ -11,6 +11,8 @@
 
 namespace Unforge\RequestToolkit;
 
+use Unforge\ArrayToolkit\Tools as AT;
+
 /**
  * Class Tools
  *
@@ -47,7 +49,7 @@ final class Tools
     public static function getIntFromPost(string $key, $default = false)
     {
         if (isset($_POST[$key])) {
-            return (int) $_POST[$key];
+            return AT::getInt($_POST, $key);
         }
 
         return $default;
@@ -64,7 +66,7 @@ final class Tools
     public static function getFloatFromPost(string $key, $default = false)
     {
         if (isset($_POST[$key])) {
-            return (float) $_POST[$key];
+            return AT::getFloat($_POST, $key);
         }
 
         return $default;
@@ -81,7 +83,7 @@ final class Tools
     public static function getStringFromPost(string $key, $default = false)
     {
         if (isset($_POST[$key])) {
-            return (string) trim($_POST[$key]);
+            return trim(AT::getString($_POST, $key));
         }
 
         return $default;
@@ -98,7 +100,7 @@ final class Tools
     public static function getArrayFromPost(string $key, $default = false)
     {
         if (isset($_POST[$key])) {
-            return (array) $_POST[$key];
+            return AT::getArray($_POST, $key);
         }
 
         return $default;
@@ -115,7 +117,7 @@ final class Tools
     public static function getRawFromPost(string $key, $default = false)
     {
         if (isset($_POST[$key])) {
-            return $_POST[$key];
+            return AT::getRaw($_POST, $key);
         }
 
         return $default;
@@ -150,7 +152,7 @@ final class Tools
     public static function getIntFromGet(string $key, $default = false)
     {
         if (isset($_GET[$key])) {
-            return (int) $_GET[$key];
+            return AT::getInt($_GET, $key);
         }
 
         return $default;
@@ -167,7 +169,7 @@ final class Tools
     public static function getFloatFromGet(string $key, $default = false)
     {
         if (isset($_GET[$key])) {
-            return (float) $_GET[$key];
+            return AT::getFloat($_GET, $key);
         }
 
         return $default;
@@ -184,7 +186,7 @@ final class Tools
     public static function getStringFromGet(string $key, $default = false)
     {
         if (isset($_GET[$key])) {
-            return (string) trim($_GET[$key]);
+            return trim(AT::getString($_GET, $key));
         }
 
         return $default;
@@ -201,7 +203,7 @@ final class Tools
     public static function getArrayFromGet(string $key, $default = false)
     {
         if (isset($_GET[$key])) {
-            return (array) $_GET[$key];
+            return AT::getArray($_GET, $key);
         }
 
         return $default;
@@ -218,7 +220,7 @@ final class Tools
     public static function getRawFromGet(string $key, $default = false)
     {
         if (isset($_GET[$key])) {
-            return $_GET[$key];
+            return AT::getRaw($_GET, $key);
         }
 
         return $default;
@@ -385,7 +387,7 @@ final class Tools
     public static function getIntFromCookie(string $key, $default = false)
     {
         if (isset($_COOKIE[$key])) {
-            return (int) $_COOKIE[$key];
+            return AT::getInt($_COOKIE, $key);
         }
 
         return $default;
@@ -402,7 +404,7 @@ final class Tools
     public static function getFloatFromCookie(string $key, $default = false)
     {
         if (isset($_COOKIE[$key])) {
-            return (float) $_COOKIE[$key];
+            return AT::getFloat($_COOKIE, $key);
         }
 
         return $default;
@@ -419,7 +421,7 @@ final class Tools
     public static function getStringFromCookie(string $key, $default = false)
     {
         if (isset($_COOKIE[$key])) {
-            return (string) trim($_COOKIE[$key]);
+            return trim(AT::getString($_COOKIE, $key));
         }
 
         return $default;
@@ -442,7 +444,7 @@ final class Tools
             } elseif ($explode_delimiter != '') {
                 $cookie = explode($explode_delimiter, $_COOKIE[$key]);
             } else {
-                $cookie = (array) $_COOKIE[$key];
+                $cookie = AT::getRaw($_COOKIE, $key);
             }
 
             return $cookie;
@@ -462,7 +464,7 @@ final class Tools
     public static function getRawFromCookie(string $key, $default = false)
     {
         if (isset($_COOKIE[$key])) {
-            return $_COOKIE[$key];
+            return AT::getRaw($_COOKIE, $key);
         }
 
         return $default;
