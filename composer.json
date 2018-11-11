@@ -1,0 +1,21 @@
+{
+  "name": "unforge/request-toolkit",
+  "description": "Request Toolkit",
+  "type": "library",
+  "homepage": "https://github.com/unforge/request-toolkit",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Ronam Unstirred",
+      "email": "unforge.coder@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.0.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Unforge\\RequestToolkit\\": "src/"
+    }
+  }
+}
