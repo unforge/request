@@ -48,7 +48,7 @@ final class Tools
      */
     public static function getIntFromPost(string $key, $default = false)
     {
-        if (isset($_POST[$key])) {
+        if (AT::checkExistKeyInArray($_POST, $key)) {
             return AT::getInt($_POST, $key);
         }
 
@@ -65,7 +65,7 @@ final class Tools
      */
     public static function getFloatFromPost(string $key, $default = false)
     {
-        if (isset($_POST[$key])) {
+        if (AT::checkExistKeyInArray($_POST, $key)) {
             return AT::getFloat($_POST, $key);
         }
 
@@ -82,7 +82,7 @@ final class Tools
      */
     public static function getStringFromPost(string $key, $default = false)
     {
-        if (isset($_POST[$key])) {
+        if (AT::checkExistKeyInArray($_POST, $key)) {
             return trim(AT::getString($_POST, $key));
         }
 
@@ -99,7 +99,7 @@ final class Tools
      */
     public static function getArrayFromPost(string $key, $default = false)
     {
-        if (isset($_POST[$key])) {
+        if (AT::checkExistKeyInArray($_POST, $key)) {
             return AT::getArray($_POST, $key);
         }
 
@@ -116,7 +116,7 @@ final class Tools
      */
     public static function getRawFromPost(string $key, $default = false)
     {
-        if (isset($_POST[$key])) {
+        if (AT::checkExistKeyInArray($_POST, $key)) {
             return AT::getRaw($_POST, $key);
         }
 
@@ -151,7 +151,7 @@ final class Tools
      */
     public static function getIntFromGet(string $key, $default = false)
     {
-        if (isset($_GET[$key])) {
+        if (AT::checkExistKeyInArray($_GET, $key)) {
             return AT::getInt($_GET, $key);
         }
 
@@ -168,7 +168,7 @@ final class Tools
      */
     public static function getFloatFromGet(string $key, $default = false)
     {
-        if (isset($_GET[$key])) {
+        if (AT::checkExistKeyInArray($_GET, $key)) {
             return AT::getFloat($_GET, $key);
         }
 
@@ -185,7 +185,7 @@ final class Tools
      */
     public static function getStringFromGet(string $key, $default = false)
     {
-        if (isset($_GET[$key])) {
+        if (AT::checkExistKeyInArray($_GET, $key)) {
             return trim(AT::getString($_GET, $key));
         }
 
@@ -202,7 +202,7 @@ final class Tools
      */
     public static function getArrayFromGet(string $key, $default = false)
     {
-        if (isset($_GET[$key])) {
+        if (AT::checkExistKeyInArray($_GET, $key)) {
             return AT::getArray($_GET, $key);
         }
 
@@ -219,7 +219,7 @@ final class Tools
      */
     public static function getRawFromGet(string $key, $default = false)
     {
-        if (isset($_GET[$key])) {
+        if (AT::checkExistKeyInArray($_GET, $key)) {
             return AT::getRaw($_GET, $key);
         }
 
@@ -363,7 +363,7 @@ final class Tools
             return (bool) isset($_COOKIE);
         }
 
-        return (bool) isset($_COOKIE[$key]);
+        return AT::checkExistKeyInArray($_GET, $key);
     }
 
     /**
@@ -386,7 +386,7 @@ final class Tools
      */
     public static function getIntFromCookie(string $key, $default = false)
     {
-        if (isset($_COOKIE[$key])) {
+        if (AT::checkExistKeyInArray($_COOKIE, $key)) {
             return AT::getInt($_COOKIE, $key);
         }
 
@@ -403,7 +403,7 @@ final class Tools
      */
     public static function getFloatFromCookie(string $key, $default = false)
     {
-        if (isset($_COOKIE[$key])) {
+        if (AT::checkExistKeyInArray($_COOKIE, $key)) {
             return AT::getFloat($_COOKIE, $key);
         }
 
@@ -420,7 +420,7 @@ final class Tools
      */
     public static function getStringFromCookie(string $key, $default = false)
     {
-        if (isset($_COOKIE[$key])) {
+        if (AT::checkExistKeyInArray($_COOKIE, $key)) {
             return trim(AT::getString($_COOKIE, $key));
         }
 
@@ -438,11 +438,11 @@ final class Tools
      */
     public static function getArrayFromCookie(string $key, string $explode_delimiter = '', $default = false)
     {
-        if (isset($_COOKIE[$key])) {
-            if (($json_data = @json_decode($_COOKIE[$key], true)) != null) {
+        if (AT::checkExistKeyInArray($_COOKIE, $key)) {
+            if (($json_data = @json_decode(AT::getRaw($_COOKIE, $key), true)) != null) {
                 $cookie = $json_data;
             } elseif ($explode_delimiter != '') {
-                $cookie = explode($explode_delimiter, $_COOKIE[$key]);
+                $cookie = explode($explode_delimiter, AT::getRaw($_COOKIE, $key));
             } else {
                 $cookie = AT::getRaw($_COOKIE, $key);
             }
