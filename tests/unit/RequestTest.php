@@ -21,6 +21,11 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         'seven' => null,
     ];
 
+    /**
+     * @var string
+     */
+    private $stream_handle = __DIR__ . "/../resources/sources/example.txt";
+
     protected function setUp()
     {
         $_GET  = [];
@@ -28,11 +33,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $_SERVER['REQUEST_METHOD'] = '';
         $_SERVER['HTTP_CONTENT_TYPE'] = '';
     }
-
-    /**
-     * @var string
-     */
-    protected static $stream_handle = 'php://input';
 
     public function testCheckExistPost()
     {
@@ -304,36 +304,118 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     public function testCheckExistPut()
     {
-        // todo
+        $this->assertFalse(Request::checkExistPut());
+
+        $_SERVER['HTTP_CONTENT_TYPE'] = 'application/json';
+
+        $this->assertTrue(Request::checkExistPut());
     }
 
     public function testGetAllFromPut()
     {
-        // todo
+        $this->assertEquals([], Request::getAllFromPut());
+
+        $request = new Request();
+        $request->setStreamHandle($this->stream_handle);
+
+        $this->assertEquals($this->example_data, $request::getAllFromPut());
+
+        $request->setStreamHandle('php://input');
     }
 
     public function testGetIntFromPut()
     {
-        // todo
+        $this->assertFalse(Request::getIntFromPut('one'));
+
+        $this->assertEquals(3, Request::getIntFromPut('three', 3));
+
+        $request = new Request();
+        $request->setStreamHandle($this->stream_handle);
+
+        $this->assertEquals(2, $request::getIntFromPut('two'));
+
+        $this->assertFalse($request::getIntFromPut('zero'));
+
+        $request->setStreamHandle('php://input');
     }
 
     public function testGetFloatFromPut()
     {
-        // todo
+        $this->assertFalse(Request::getFloatFromPut('one'));
+
+        $this->assertEquals(2.2, Request::getFloatFromPut('two', 2.2));
+
+        $request = new Request();
+        $request->setStreamHandle($this->stream_handle);
+
+        $this->assertEquals(2.0, $request::getFloatFromPut('two'));
+
+        $this->assertEquals(5.5, $request::getFloatFromPut('five'));
+
+        $this->assertFalse($request::getFloatFromPut('zero'));
+
+        $request->setStreamHandle('php://input');
     }
 
     public function testGetStringFromPut()
     {
-        // todo
+        $this->assertFalse(Request::getStringFromPut('one'));
+
+        $this->assertEquals('two', Request::getStringFromPut('two', 'two'));
+
+        $request = new Request();
+        $request->setStreamHandle($this->stream_handle);
+
+        $this->assertEquals('5.5', $request::getStringFromPut('five'));
+
+        $this->assertEquals('2', $request::getStringFromPut('two'));
+
+        $this->assertFalse($request::getStringFromPut('zero'));
+
+        $request->setStreamHandle('php://input');
     }
 
     public function testGetArrayFromPut()
     {
-        // todo
+        $this->assertFalse(Request::getArrayFromPut('one'));
+
+        $this->assertEquals(['two' => 2], Request::getArrayFromPut('two', ['two' => 2]));
+
+        $request = new Request();
+        $request->setStreamHandle($this->stream_handle);
+
+        $this->assertEquals([3], $request::getArrayFromPut('three'));
+
+        $this->assertEquals([5.5], $request::getArrayFromPut('five'));
+
+        $this->assertFalse($request::getArrayFromPut('zero'));
+
+        $request->setStreamHandle('php://input');
     }
 
     public function testGetRawFromPut()
     {
-        // todo
+        $this->assertFalse(Request::getRawFromPut('one'));
+
+        $this->assertEquals(['two' => 2], Request::getRawFromPut('two', ['two' => 2]));
+
+        $request = new Request();
+        $request->setStreamHandle($this->stream_handle);
+
+        $this->assertEquals(1, $request::getRawFromPut('one'));
+
+        $this->assertEquals('2', $request::getRawFromPut('two'));
+
+        $this->assertEquals([3], $request::getRawFromPut('three'));
+
+        $this->assertEquals(5.5, $request::getRawFromPut('five'));
+
+        $this->assertTrue($request::getRawFromPut('six'));
+
+        $this->assertEquals(null, $request::getRawFromPut('seven'));
+
+        $this->assertFalse($request::getRawFromPut('zero'));
+
+        $request->setStreamHandle('php://input');
     }
 }

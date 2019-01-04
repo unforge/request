@@ -24,6 +24,22 @@ class Request
     protected static $stream_handle = 'php://input';
 
     /**
+     * @param string $stream_handle
+     */
+    public function setStreamHandle(string $stream_handle) : void
+    {
+        static::$stream_handle = $stream_handle;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStreamHandle() : string
+    {
+        return static::$stream_handle;
+    }
+
+    /**
      * @return bool
      */
     public static function checkExistPost() : bool
