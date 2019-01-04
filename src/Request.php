@@ -374,13 +374,15 @@ class Request
      * @param string $key
      * @return bool
      */
-    public static function checkExistsCookie(string $key = '') : bool
+    public static function checkExistCookie(string $key = '') : bool
     {
         if (!$key) {
-            return (bool) isset($_COOKIE);
+            return (bool) isset($_COOKIE) && !empty($_COOKIE);
+        } elseif (!isset($_COOKIE) || empty($_COOKIE)) {
+            return false;
         }
 
-        return Arr::checkExistKeyInArray($_GET, $key);
+        return Arr::checkExistKeyInArray($_COOKIE, $key);
     }
 
     /**
@@ -464,7 +466,7 @@ class Request
                 $cookie = Arr::getRaw($_COOKIE, $key);
             }
 
-            return $cookie;
+            return (array) $cookie;
         }
 
         return $default;

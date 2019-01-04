@@ -24,14 +24,16 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     /**
      * @var string
      */
-    private $stream_handle = __DIR__ . "/../resources/sources/example.txt";
+    private $stream_handle = __DIR__ . "/../resources/sources/put_request_examples.txt";
 
     protected function setUp()
     {
-        $_GET  = [];
-        $_POST = [];
-        $_SERVER['REQUEST_METHOD'] = '';
-        $_SERVER['HTTP_CONTENT_TYPE'] = '';
+        $_GET       = [];
+        $_POST      = [];
+        $_COOKIE    = [];
+
+        $_SERVER['REQUEST_METHOD']      = '';
+        $_SERVER['HTTP_CONTENT_TYPE']   = '';
     }
 
     public function testCheckExistPost()
@@ -267,39 +269,105 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         // todo
     }
 
-    public function testCheckExistsCookie()
+    public function testCheckExistCookie()
     {
-        // todo
+        $this->assertFalse(Request::checkExistCookie());
+
+        $this->assertFalse(Request::checkExistCookie('one'));
+
+        $_COOKIE = $this->example_data;
+
+        $this->assertTrue(Request::checkExistCookie());
+
+        $this->assertTrue(Request::checkExistCookie('two'));
     }
 
     public function testGetAllFromCookie()
     {
-        // todo
+        $this->assertEquals([], Request::getAllFromCookie());
+
+        $_COOKIE = $this->example_data;
+
+        $this->assertEquals($this->example_data, Request::getAllFromCookie());
     }
 
     public function testGetIntFromCookie()
     {
-        // todo
+        $this->assertFalse(Request::getIntFromCookie('one'));
+
+        $this->assertEquals(3, Request::getIntFromCookie('three', 3));
+
+        $_COOKIE = $this->example_data;
+
+        $this->assertEquals(2, Request::getIntFromCookie('two'));
+
+        $this->assertFalse(Request::getIntFromCookie('zero'));
     }
 
     public function testGetFloatFromCookie()
     {
-        // todo
+        $this->assertFalse(Request::getFloatFromCookie('one'));
+
+        $this->assertEquals(2.2, Request::getFloatFromCookie('two', 2.2));
+
+        $_COOKIE = $this->example_data;
+
+        $this->assertEquals(2.0, Request::getFloatFromCookie('two'));
+
+        $this->assertEquals(5.5, Request::getFloatFromCookie('five'));
+
+        $this->assertFalse(Request::getFloatFromCookie('zero'));
     }
 
     public function testGetStringFromCookie()
     {
-        // todo
+        $this->assertFalse(Request::getStringFromCookie('one'));
+
+        $this->assertEquals('two', Request::getStringFromCookie('two', 'two'));
+
+        $_COOKIE = $this->example_data;
+
+        $this->assertEquals('5.5', Request::getStringFromCookie('five'));
+
+        $this->assertEquals('2', Request::getStringFromCookie('two'));
     }
 
     public function testGetArrayFromCookie()
     {
-        // todo
+        $this->assertFalse(Request::getArrayFromCookie('one'));
+
+        $this->assertEquals(['two' => 2], Request::getArrayFromPut('two', ['two' => 2]));
+
+        $_COOKIE = $this->example_data;
+
+        $this->assertEquals([3], Request::getArrayFromCookie('three'));
+
+        $this->assertEquals([5.5], Request::getArrayFromCookie('five'));
+
+        $this->assertFalse(Request::getArrayFromCookie('zero'));
     }
 
     public function testGetRawFromCookie()
     {
-        // todo
+        $this->assertFalse(Request::getRawFromCookie('one'));
+
+        $this->assertEquals(['two' => 2], Request::getRawFromCookie('two', ['two' => 2]));
+
+        $_COOKIE = $this->example_data;
+
+        $this->assertEquals(1, Request::getRawFromCookie('one'));
+
+        $this->assertEquals('2', Request::getRawFromCookie('two'));
+
+        $this->assertEquals([3], Request::getRawFromCookie('three'));
+
+        $this->assertEquals(5.5, Request::getRawFromCookie('five'));
+
+        $this->assertTrue(Request::getRawFromCookie('six'));
+
+        $this->assertEquals(null, Request::getRawFromCookie('seven'));
+
+        $this->assertFalse(Request::getRawFromCookie('zero'));
     }
 
     public function testCheckExistPut()
