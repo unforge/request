@@ -19,6 +19,11 @@ namespace Unforge\Toolkit;
 class Request
 {
     /**
+     * @var string
+     */
+    protected static $stream_handle = 'php://input';
+
+    /**
      * @return bool
      */
     public static function checkExistPost() : bool
@@ -349,8 +354,6 @@ class Request
         return $post;
     }
 
-    // TODO Add support prepare request methods from PUT
-
     /**
      * @param string $key
      * @return bool
@@ -463,6 +466,124 @@ class Request
     {
         if (isset($_COOKIE[$key])) {
             return Arr::getRaw($_COOKIE, $key);
+        }
+
+        return $default;
+    }
+
+    /**
+     * @return bool
+     */
+    public static function checkExistPut() : bool
+    {
+        if (isset($_SERVER['HTTP_CONTENT_TYPE'])) {
+            return (bool) trim($_SERVER['HTTP_CONTENT_TYPE']) == 'application/json';
+        }
+
+        return false;
+    }
+
+    /**
+     * Return ALL params from PUT
+     *
+     * @return array
+     */
+    public static function getAllFromPut() : array
+    {
+        $request_json = file_get_contents(static::$stream_handle);
+        return json_decode($request_json, true) ?? [];
+    }
+
+    /**
+     * Return INT value from PUT
+     *
+     * @param string $key
+     * @param bool|int $default
+     *
+     * @return bool|int
+     */
+    public static function getIntFromPut(string $key, $default = false)
+    {
+        $request = self::getAllFromPut();
+
+        if (Arr::checkExistKeyInArray($request, $key)) {
+            return Arr::getInt($request, $key);
+        }
+
+        return $default;
+    }
+
+    /**
+     * Return FLOAT value from PUT
+     *
+     * @param string $key
+     * @param bool $default
+     *
+     * @return bool|float
+     */
+    public static function getFloatFromPut(string $key, $default = false)
+    {
+        $request = self::getAllFromPut();
+
+        if (Arr::checkExistKeyInArray($request, $key)) {
+            return Arr::getFloat($request, $key);
+        }
+
+        return $default;
+    }
+
+    /**
+     * Return STRING value from PUT
+     *
+     * @param string $key
+     * @param bool $default
+     *
+     * @return bool|string
+     */
+    public static function getStringFromPut(string $key, $default = false)
+    {
+        $request = self::getAllFromPut();
+
+        if (Arr::checkExistKeyInArray($request, $key)) {
+            return trim(Arr::getString($request, $key));
+        }
+
+        return $default;
+    }
+
+    /**
+     * Return ARRAY value from PUT
+     *
+     * @param string $key
+     * @param bool $default
+     *
+     * @return bool|array
+     */
+    public static function getArrayFromPut(string $key, $default = false)
+    {
+        $request = self::getAllFromPut();
+
+        if (Arr::checkExistKeyInArray($request, $key)) {
+            return Arr::getArray($request, $key);
+        }
+
+        return $default;
+    }
+
+    /**
+     * Return RAW value from PUT
+     *
+     * @param string $key
+     * @param bool $default
+     *
+     * @return bool|mixed
+     */
+    public static function getRawFromPut(string $key, $default = false)
+    {
+        $request = self::getAllFromPut();
+
+        if (Arr::checkExistKeyInArray($request, $key)) {
+            return Arr::getRaw($request, $key);
         }
 
         return $default;
