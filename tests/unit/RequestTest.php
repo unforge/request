@@ -236,37 +236,161 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     public function testCheckExistRequest()
     {
-        // todo
+        $this->assertFalse(Request::checkExistRequest());
+
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+
+        $this->assertTrue(Request::checkExistRequest());
+
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+
+        $this->assertTrue(Request::checkExistRequest());
     }
 
     public function testGetAllFromRequest()
     {
-        // todo
+        $this->assertEquals([], Request::getAllFromRequest());
+
+        $_POST = $this->example_data;
+
+        $this->assertEquals($this->example_data, Request::getAllFromRequest());
+
+        $_POST = [];
+        $_GET = $this->example_data;
+
+        $this->assertEquals($this->example_data, Request::getAllFromRequest());
     }
 
     public function testGetIntFromRequest()
     {
-        // todo
+        $this->assertFalse(Request::getIntFromRequest('one'));
+
+        $this->assertEquals(3, Request::getIntFromRequest('three', 3));
+
+        $_POST = $this->example_data;
+
+        $this->assertEquals(2, Request::getIntFromRequest('two'));
+
+        $this->assertFalse(Request::getIntFromRequest('zero'));
+
+        $_POST = [];
+        $_GET = $this->example_data;
+
+        $this->assertEquals(2, Request::getIntFromRequest('two'));
+
+        $this->assertFalse(Request::getIntFromRequest('zero'));
     }
 
     public function testGetFloatFromRequest()
     {
-        // todo
+        $this->assertFalse(Request::getFloatFromRequest('one'));
+
+        $this->assertEquals(2.2, Request::getFloatFromRequest('two', 2.2));
+
+        $_POST = $this->example_data;
+
+        $this->assertEquals(2.0, Request::getFloatFromRequest('two'));
+
+        $this->assertEquals(5.5, Request::getFloatFromRequest('five'));
+
+        $this->assertFalse(Request::getFloatFromRequest('zero'));
+
+        $_POST = [];
+        $_GET = $this->example_data;
+
+        $this->assertEquals(2.0, Request::getFloatFromRequest('two'));
+
+        $this->assertEquals(5.5, Request::getFloatFromRequest('five'));
+
+        $this->assertFalse(Request::getFloatFromRequest('zero'));
     }
 
     public function testGetStringFromRequest()
     {
-        // todo
+        $this->assertFalse(Request::getStringFromRequest('one'));
+
+        $this->assertEquals('two', Request::getStringFromRequest('two', 'two'));
+
+        $_POST = $this->example_data;
+
+        $this->assertEquals('5.5', Request::getStringFromRequest('five'));
+
+        $this->assertEquals('2', Request::getStringFromRequest('two'));
+
+        $this->assertFalse(Request::getStringFromRequest('zero'));
+
+        $_POST = [];
+        $_GET = $this->example_data;
+
+        $this->assertEquals('5.5', Request::getStringFromRequest('five'));
+
+        $this->assertEquals('2', Request::getStringFromRequest('two'));
+
+        $this->assertFalse(Request::getStringFromRequest('zero'));
     }
 
     public function testGetArrayFromRequest()
     {
-        // todo
+        $this->assertFalse(Request::getArrayFromRequest('one'));
+
+        $this->assertEquals(['two' => 2], Request::getArrayFromRequest('two', ['two' => 2]));
+
+        $_POST = $this->example_data;
+
+        $this->assertEquals([3], Request::getArrayFromRequest('three'));
+
+        $this->assertEquals([5.5], Request::getArrayFromRequest('five'));
+
+        $this->assertFalse(Request::getArrayFromRequest('zero'));
+
+        $_POST = [];
+        $_GET = $this->example_data;
+
+        $this->assertEquals([3], Request::getArrayFromRequest('three'));
+
+        $this->assertEquals([5.5], Request::getArrayFromRequest('five'));
+
+        $this->assertFalse(Request::getArrayFromRequest('zero'));
     }
 
     public function testGetRawFromRequest()
     {
-        // todo
+        $this->assertFalse(Request::getRawFromRequest('one'));
+
+        $this->assertEquals(['two' => 2], Request::getRawFromRequest('two', ['two' => 2]));
+
+        $_POST = $this->example_data;
+
+        $this->assertEquals(1, Request::getRawFromRequest('one'));
+
+        $this->assertEquals('2', Request::getRawFromRequest('two'));
+
+        $this->assertEquals([3], Request::getRawFromRequest('three'));
+
+        $this->assertEquals(5.5, Request::getRawFromRequest('five'));
+
+        $this->assertTrue(Request::getRawFromRequest('six'));
+
+        $this->assertEquals(null, Request::getRawFromRequest('seven'));
+
+        $this->assertFalse(Request::getRawFromRequest('zero'));
+
+        $_POST = [];
+        $_GET = $this->example_data;
+
+        $this->assertEquals(1, Request::getRawFromRequest('one'));
+
+        $this->assertEquals('2', Request::getRawFromRequest('two'));
+
+        $this->assertEquals([3], Request::getRawFromRequest('three'));
+
+        $this->assertEquals(5.5, Request::getRawFromRequest('five'));
+
+        $this->assertTrue(Request::getRawFromRequest('six'));
+
+        $this->assertEquals(null, Request::getRawFromRequest('seven'));
+
+        $this->assertFalse(Request::getRawFromRequest('zero'));
     }
 
     public function testCheckExistCookie()
