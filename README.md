@@ -89,5 +89,5 @@ Basic Usage
 
     $name = Request::getStringFromPut('name');
 
-    echo $$name; // User
+    echo $name; // User
 ```
